@@ -19,7 +19,7 @@ def convert(filename_str, coords):
     coords[1] /= int(image.shape[0])
     coords[2] /= int(image.shape[1])
     coords[3] /= int(image.shape[0])
-    os.chdir("Label")
+    os.chdir("labels")
     return coords
 
 ROOT_DIR = os.getcwd()
@@ -48,8 +48,9 @@ for DIR in DIRS:
                 os.chdir(CLASS_DIR)
                 print("Converting annotations for class: ", CLASS_DIR)
                 
+                os.rename("Label", "labels")
                 # Step into Label folder where annotations are generated
-                os.chdir("Label")
+                os.chdir("labels")
 
                 for filename in tqdm(os.listdir(os.getcwd())):
                     filename_str = str.split(filename, ".")[0]
@@ -67,13 +68,11 @@ for DIR in DIRS:
                                 line = line.replace(line, newline)
                                 annotations.append(line)
                             f.close()
-                        os.chdir("..")
                         with open(filename, "w") as outfile:
                             for line in annotations:
                                 outfile.write(line)
                                 outfile.write("\n")
                             outfile.close()
-                        os.chdir("Label")
                 os.chdir("..")
                 os.chdir("..")
         os.chdir("..")
